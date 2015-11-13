@@ -30,13 +30,13 @@
 	{
 		//insert
 		$like_insert_sql = "INSERT INTO likes (user_id_1,user_id_2) VALUES ('$user_id_1','$user_id_2');";
-		if ($conn<-query($like_insert_sql) == true) {
+		if ($conn->query($like_insert_sql) == true) {
 			$json_response["success"] = true;
 
 			//checking for a new match
 			$sql = "SELECT * FROM likes WHERE user_id_1 = '$user_id_2' AND user_id_2 = '$user_id_1';";
 			$result = $conn->query($sql);
-			if ($result->rows > 0) {
+			if ($result->num_rows > 0) {
 				$match_sql_1 = "INSERT INTO matches (user_id_1,user_id_2) VALUES ('$user_id_1','$user_id_2');";
 				$match_sql_2 = "INSERT INTO matches (user_id_1,user_id_2) VALUES ('$user_id_2','$user_id_1');";
 

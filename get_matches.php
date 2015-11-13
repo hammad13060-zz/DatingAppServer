@@ -25,15 +25,15 @@
 	    die("Connection failed: " . $conn->connect_error);
 	}
 
-	$match_sql = "SELECT user_id_2 FROM matches WHERE user_id_1 = \'" . $user_id . "\';";
-	$match_data_sql = "SELECT * FROM users WHERE user_id IN (" . $match_sql . ");";
+	$match_sql = "SELECT user_id_2 FROM matches WHERE user_id_1='$user_id'";
+	$match_data_sql = "SELECT * FROM users WHERE user_id IN ($match_sql);";
 
 
 	$match_data_list = array();
 
 	if ($fetch_matches === true) {
 		$result = $conn->query($match_data_sql);
-		if ($result->rows > 0) {
+		if ($result->num_rows > 0) {
 			$json_response["has_matches"] = true;
 			$i = 0;
 			while ($row = $result->fetch_assoc()) {
