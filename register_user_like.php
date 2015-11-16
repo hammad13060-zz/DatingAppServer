@@ -1,5 +1,12 @@
 <?php
 
+	require 'vendor/autoload.php';
+	use Parse\ParseClient;
+	use Parse\ParseObject;
+ 
+	ParseClient::initialize('Oi06rcMuTImq7ZolKPfanXUZTZBDhl23a91xvEQR', 'ne6sFrfymIHSdCuclROMUKYvh6bw2sO3AA1SeKPU', 'RUaxhmj7wXa7WoOlMtHOHPtiwnGQVJKHTwRcYHPq');
+
+
 	$servername = "127.0.0.1";
 	$username = "root";
 	$password = "";
@@ -25,6 +32,8 @@
 	// Create connection
 	$conn = new mysqli($servername, $username, $password, $dbname);
 
+
+	$chatData = new ParseObject("ChatData");
 	
 	if( ($user_id_1 !== NULL) && ($user_id_2 !== NULL)  )
 	{
@@ -37,11 +46,22 @@
 			$sql = "SELECT * FROM likes WHERE user_id_1 = '$user_id_2' AND user_id_2 = '$user_id_1';";
 			$result = $conn->query($sql);
 			if ($result->num_rows > 0) {
-				$match_sql_1 = "INSERT INTO matches (user_id_1,user_id_2) VALUES ('$user_id_1','$user_id_2');";
-				$match_sql_2 = "INSERT INTO matches (user_id_1,user_id_2) VALUES ('$user_id_2','$user_id_1');";
 
-				$conn->query($match_sql_1);
-				$conn->query($match_sql_2);
+				try {
+  					$chatData->setArray("messages", array());
+  					$chatData->save();
+  					$chat_id = $chatData->getObjectId();
+
+  					$match_sql_1 = "INSERT INTO matches (user_id_1,user_id_2,chat_id) VALUES ('$user_id_1','$user_id_2','$chat_id');";
+					$match_sql_2 = "INSERT INTO matches (user_id_1,user_id_2,chat_id) VALUES ('$user_id_2','$user_id_1','$chat_id');";
+
+					$conn->query($match_sql_1);
+					$conn->query($match_sql_2);
+				} catch (ParseException $ex) {  
+  					// Execute any logic that should take place if the save fails.
+  					// error is a ParseException object with an error code and message.
+  					echo 'Failed to create new object, with error message: ' . $ex->getMessage();
+					}
 			}
 		}
 	}
