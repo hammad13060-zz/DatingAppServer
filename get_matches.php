@@ -50,7 +50,7 @@
 				$match_data["gender"] = $row["gender"];
 				$match_data["age"] = $row["age"];
 				$match_data["url"] = $row["url"];
-				//$match_data["chat_id"] = $chat_id_row["chat_id"];
+				$match_data["chat_id"] = $chat_id_row["chat_id"];
 
 				$match_data_list[$i] = $match_data;
 
