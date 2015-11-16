@@ -37,6 +37,10 @@
 			$json_response["has_matches"] = true;
 			$i = 0;
 			while ($row = $result->fetch_assoc()) {
+				$user_id_2 = $row["user_id"];
+				$chat_id_query = "SELECT * FROM matches WHERE user_id_1='$user_id' AND user_id_2='$user_id_2';";
+				$chat_id_result = $conn->query($chat_id_query);
+				$chat_id_row = $chat_id_result->fetch_assoc();
 				//initializing json object
 				$match_data = array();
 				
@@ -46,6 +50,7 @@
 				$match_data["gender"] = $row["gender"];
 				$match_data["age"] = $row["age"];
 				$match_data["url"] = $row["url"];
+				//$match_data["chat_id"] = $chat_id_row["chat_id"];
 
 				$match_data_list[$i] = $match_data;
 
